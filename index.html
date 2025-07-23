@@ -1,21 +1,24 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Malla Curricular Interactiva</title>
+  <title>Plan de Estudio Ingeniería Biomédica</title>
   <style>
     :root {
-     --color-regular: #91c4f2;     /* celeste suave */
-  --color-aprobada: #72d38d;   /* verde pastel */
-  --color-bloque: #f1f1f1;     /* gris claro */
-  --color-titulo: #2c3e50;     /* azul oscuro */
-  --color-bloqueada: #ddd;     /* gris medio para materias bloqueadas */
-}
+      --color-fondo: #F8F4F2; /* Marfil rosado claro */
+      --color-texto: #3B2F2F; /* Marrón muy oscuro con tinte ciruela */
+      --color-boton: #B47B84; /* Rosa viejo con fuerza */
+      --color-boton-hover: #9D5C6C; /* Tono más profundo para hover */
+      --color-progreso-inicial: #F2C94C; /* Amarillo suave para materias regulares */
+      --color-progreso-avanzado: #6DBE45; /* Verde claro para materias aprobadas */
+      --color-recuadro: #F2E3DC; /* Rosado beige claro */
+      --color-borde: #C4B5AF; /* Gris cálido con matiz rosa viejo */
+      --color-titulo: #8C4A52; /* Vino apagado */
+    }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #e8dddd;
+      font-family: 'Segoe UI', sans-serif; /* Fuente uniforme */
+      background: var(--color-fondo); /* Fondo suave */
       margin: 0;
       padding: 20px;
     }
@@ -23,6 +26,7 @@
     h1 {
       text-align: center;
       color: var(--color-titulo);
+      font-size: 2rem;
     }
 
     .anio {
@@ -30,7 +34,7 @@
     }
 
     .bloque {
-      background: var(--color-bloque);
+      background: var(--color-recuadro);
       border-radius: 20px;
       padding: 15px;
       margin: 10px;
@@ -40,6 +44,7 @@
     .bloque h2 {
       font-size: 1.2rem;
       margin-bottom: 10px;
+      color: var(--color-texto);
     }
 
     .materia {
@@ -51,26 +56,25 @@
       transition: all 0.3s ease;
       border-left: 8px solid transparent;
       user-select: none;
+      font-family: 'Segoe UI', sans-serif; /* Fuente de materias */
     }
 
     .materia.regular {
-      background: var(--color-regular);
-      border-left-color: #dac1b1;
+      background: var(--color-progreso-inicial);
+      border-left-color: var(--color-progreso-inicial); /* Color de borde para materias regulares */
     }
 
     .materia.aprobada {
-      background: var(--color-aprobada);
+      background: var(--color-progreso-avanzado);
       text-decoration: line-through;
-      border-left-color: #ac746c;
+      border-left-color: var(--color-progreso-avanzado); /* Color de borde para materias aprobadas */
     }
 
     .materia.bloqueada {
-      background: var(--color-bloqueada);
-      border-left-color: transparent !important;
+      background: #e0e0e0; /* Gris más claro */
       cursor: not-allowed;
       opacity: 0.5;
       pointer-events: none;
-      text-decoration: none !important;
       color: #666;
     }
 
@@ -78,106 +82,154 @@
       max-width: 300px;
       margin: 0 auto 30px auto;
     }
+
+    #usuarioPanel {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #usuarioPanel input {
+      padding: 10px;
+      font-size: 1.2rem;
+      border: 2px solid var(--color-borde);
+      border-radius: 5px;
+      transition: border-color 0.3s;
+      font-family: 'Segoe UI', sans-serif; /* Fuente uniforme */
+    }
+
+    #usuarioPanel input:focus {
+      border-color: var(--color-borde);
+      outline: none;
+    }
+
+    #usuarioPanel button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background-color: var(--color-boton);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      font-family: 'Segoe UI', sans-serif; /* Fuente uniforme */
+    }
+
+    #usuarioPanel button:hover {
+      background-color: var(--color-boton-hover);
+    }
+
+    #accionesUsuario {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #accionesUsuario button {
+      padding: 8px 14px;
+      margin: 0 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: var(--color-boton);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      font-family: 'Segoe UI', sans-serif; /* Fuente uniforme */
+    }
+
+    #accionesUsuario button:hover {
+      background-color: var(--color-boton-hover);
+    }
+
+    #nombreActual {
+      font-weight: bold;
+    }
+
+    #porcentajeAvance {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 10px;
+      color: var(--color-titulo);
+    }
   </style>
 </head>
 <body>
-  <h1>Malla Curricular Interactiva</h1>
+  <h1>Plan de Estudio Ingeniería Biomédica</h1>
+
+  <div id="usuarioPanel">
+    <input type="text" id="nombreUsuario" placeholder="Ingrese su Matricula" />
+    <button onclick="iniciarSesion()">Ingresar</button>
+  </div>
+
+  <div id="accionesUsuario" style="display:none;">
+    Usuario actual: <span id="nombreActual"></span>
+    <button onclick="cambiarUsuario()">Cambiar de usuario</button>
+    <button onclick="borrarProgreso()">Borrar progreso</button>
+  </div>
 
   <div id="avanceContainer">
     <canvas id="graficoAvance"></canvas>
+    <div id="porcentajeAvance">0%</div>
   </div>
 
-  <div class="anio">
-    <div class="bloque">
-      <h2>Ingreso</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Ambientación Universitaria</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Matemática</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Física y Química</div>
-    </div>
-    <div class="bloque">
-      <h2>1.º Año - 1.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada">Análisis Matemático 1</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada, Ambientación Universitaria:aprobada">Taller y Laboratorio </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada,Física y Química:aprobada">Química</div>
-    </div>
-    <div class="bloque">
-      <h2>1.º Año - 2.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:regular">Álgebra Lineal</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular, Física y Química:regular">Física 1</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Química:regular">Química Orgánica y Biológica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Sistemas de Representación</div>
-    </div>
- <div class="anio">
-  <div class="bloque">
-      <h2>2.º Año - 3.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular, Álgebra Lineal:regular">Análisis Matemático 2</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Álgebra Lineal:regular, Física 1:regular">Física 2</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Química Orgánica y Biológica:regular">Anatomía para Ingenieros</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 1:regular">Estática y Resistencia de los Materiales </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos=""> Modulo de Inglés </div>
-    </div>
-   <div class="bloque">
-      <h2>2.º Año - 4.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 2:regular">Análisis Matemático 3</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 2:regular, Taller y Laboratorio:regular">Electrónica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Anatomía para Ingenieros:regular">Histológia para Ingenieros</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Informática y Cálculo Numérico</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Probabilidad y Estadística</div>
-    </div>
+  <div id="malla" style="display:none;">
     <div class="anio">
-  <div class="bloque">
-      <h2>3.º Año - 5.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Taller y Laboratorio:regular, Informática y Cálculo Númerico:regular">Electrónica Digital 1</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 2:regular">Electrotecnia General Y Máquinas Eléctricas</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Histología para Ingenieros:regular, Física 2:regular">Fisiología Humana </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 3:regular">Señales y Sistemas </div>
-    </div>
-   <div class="bloque">
-      <h2>3.º Año - 6.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiología Humana:regular,Estática y Resistencia de los Materiales:regular ">Biomateriales</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrónica Digital 1:regular">Electrónica Digital 2</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiolgía Humana:regular">Física Biomédica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Ingeniería Económica y Legal</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrotecnia General Y Máquinas Eléctricas:regular, Señales y Sistemas:regular">Teoría de Redes y Control </div>
-    </div>
       <div class="bloque">
-      <h2>4.º Año - 7.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrónica:regular, Teoría de Redes y Control:regular">Electrónica Analógica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física Biomédica:regular, Biomateriales:regular">Fisiopatológia</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrotecnia General Y Máquinas Eléctricas:regular, Sistemas de Representación:regular">Instalaciones Hospitalarias </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Informática y Cálculo Númerico:regular,Análisis Matemático 3:regular,Señales y Sistemas:regular">Procesamiento de Señales </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Teoría de Redes y Control:regular">Transductores y Sensores</div>
-    </div>
-   <div class="bloque">
-      <h2>4.º Año - 8.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Anatomía para Ingenieros:regular,Estática y Resistencia de los Materiales:regular,Análisis Matemático 2:regular ">Biomecánica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Procesamiento de Señales:regular,Fisiolgía Humana:regular, Física 2:regular">Imágenes en Medcicina</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Transductores y Sensores:regular,Electrónica Analógica:regular, Electrónica Digital 2:regular">Instrumentación Biomédica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Práctica Profesional Supervisada </div>
-    </div>
+        <h2>Ingreso</h2>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Ambientación Universitaria</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Matemática</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Física y Química</div>
+      </div>
       <div class="bloque">
-      <h2>5.º Año - 9.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiopatología:regular,Transductores y Sensores:regular, Biomecánica:regular">Ingeniería en Rehabilitación</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Imágenes en Medicina:regular, Instalaciones Hospitalarias:regular, Instrumentación Biomédica">Ingeniería Hospitalaria</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Probabilidad y Estadística:regular, Informática y Cálculo Númercico:regular">Modelos y Simulación</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Selectiva 1 </div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física Biomédica:regular,Imágenes en Medicina:regular">Radiaciones Ionizantes en Medicina</div>
+        <h2>1.º Año - 1.º Cuatrimestre</h2>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada">Análisis Matemático 1</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada, Ambientación Universitaria:aprobada">Taller y Laboratorio </div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada,Física y Química:aprobada">Química</div>
+      </div>
+      <div class="bloque">
+        <h2>1.º Año - 2.º Cuatrimestre</h2>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:regular">Álgebra Lineal</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular, Física y Química:regular">Física 1</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Química:regular">Química Orgánica y Biológica</div>
+        <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Sistemas de Representación</div>
+      </div>
     </div>
-   <div class="bloque">
-      <h2>5.º Año - 10.º Cuatrimestre</h2>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Ingeniería Hospitalaria:regular,Radiaciones Ionizantes en Medicina:regular,Ingeniería Económica y Legal:regular ">Higiene y Seguridad</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Intrumentación Biomédica:regular ">Seguridad y Normalización Biomédica</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Selectiva 2</div>
-      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Proyecto Integrador</div>
-    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const totalMaterias = 47;
+    let usuarioActual = null;
 
-    // Función para "normalizar" nombres (minúsculas y sin espacios extras)
     function normalizarNombre(nombre) {
       return nombre.trim().toLowerCase();
+    }
+
+    function iniciarSesion() {
+      const input = document.getElementById('nombreUsuario');
+      const nombre = input.value.trim();
+      if (!nombre) return alert("Ingresá tu nombre");
+
+      usuarioActual = normalizarNombre(nombre);
+      document.getElementById('usuarioPanel').style.display = 'none';
+      document.getElementById('malla').style.display = 'block';
+      document.getElementById('accionesUsuario').style.display = 'block';
+      document.getElementById('nombreActual').innerText = nombre;
+
+      cargarProgreso();
+      actualizarGrafico();
+      actualizarBloqueos();
+    }
+
+    function cambiarUsuario() {
+      location.reload();
+    }
+
+    function borrarProgreso() {
+      if (confirm("¿Estás seguro de que querés borrar todo tu progreso?")) {
+        localStorage.removeItem(`malla_${usuarioActual}`);
+        location.reload();
+      }
     }
 
     function cambiarEstado(elemento) {
@@ -192,8 +244,30 @@
         elemento.classList.add('regular');
       }
 
+      guardarProgreso();
       actualizarGrafico();
       actualizarBloqueos();
+    }
+
+    function guardarProgreso() {
+      const progreso = {};
+      document.querySelectorAll('.materia').forEach(materia => {
+        if (materia.classList.contains('aprobada')) {
+          progreso[materia.textContent.trim()] = 'aprobada';
+        } else if (materia.classList.contains('regular')) {
+          progreso[materia.textContent.trim()] = 'regular';
+        }
+      });
+      localStorage.setItem(`malla_${usuarioActual}`, JSON.stringify(progreso));
+    }
+
+    function cargarProgreso() {
+      const datos = JSON.parse(localStorage.getItem(`malla_${usuarioActual}`)) || {};
+      document.querySelectorAll('.materia').forEach(materia => {
+        materia.classList.remove('regular', 'aprobada');
+        const estado = datos[materia.textContent.trim()];
+        if (estado) materia.classList.add(estado);
+      });
     }
 
     function contarAprobadas() {
@@ -205,6 +279,8 @@
       const restante = totalMaterias - aprobadas;
       graficoAvance.data.datasets[0].data = [aprobadas, restante];
       graficoAvance.update();
+      const porcentaje = ((aprobadas / totalMaterias) * 100).toFixed(2);
+      document.getElementById('porcentajeAvance').innerText = `${porcentaje}%`;
     }
 
     function actualizarBloqueos() {
@@ -219,14 +295,12 @@
         }
 
         const prereqList = prereqs.split(',').map(p => p.trim()).filter(p => p !== "");
-
         let bloqueada = false;
 
         for (let prereq of prereqList) {
           let [nombre, estadoReq] = prereq.split(':').map(x => x.trim().toLowerCase());
           if (!estadoReq) estadoReq = 'aprobada';
 
-          // Buscar materia prerequisito usando nombre normalizado
           const materiaPrereq = Array.from(document.querySelectorAll('.materia'))
             .find(m => normalizarNombre(m.textContent) === nombre);
 
@@ -251,10 +325,8 @@
 
         if (bloqueada) {
           materia.classList.add('bloqueada');
-          materia.style.pointerEvents = 'none';
         } else {
           materia.classList.remove('bloqueada');
-          materia.style.pointerEvents = 'auto';
         }
       });
     }
@@ -266,7 +338,7 @@
         labels: ['Aprobadas', 'Restantes'],
         datasets: [{
           data: [0, totalMaterias],
-          backgroundColor: ['#b5ead7', '#f3f3f3'],
+          backgroundColor: [var(--color-progreso-avanzado), var(--color-fondo)], // Colores del gráfico
         }]
       },
       options: {
@@ -277,11 +349,6 @@
         }
       }
     });
-
-    window.onload = function() {
-      actualizarBloqueos();
-      actualizarGrafico();
-    };
   </script>
 </body>
 </html>
