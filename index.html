@@ -9,8 +9,8 @@
       --color-texto: #3B2F2F; /* Marrón muy oscuro con tinte ciruela */
       --color-boton: #B47B84; /* Rosa viejo con fuerza */
       --color-boton-hover: #9D5C6C; /* Tono más profundo para hover */
-      --color-progreso-inicial: #F2C94C; /* Amarillo suave para materias regulares */
-      --color-progreso-avanzado: #6DBE45; /* Verde claro para materias aprobadas */
+      --color-progreso-inicial: #A26769; /* Amarillo dorado suave */
+      --color-progreso-avanzado: #D8A48F; /* Verde seco/oliva pastel */
       --color-recuadro: #F2E3DC; /* Rosado beige claro */
       --color-borde: #C4B5AF; /* Gris cálido con matiz rosa viejo */
       --color-titulo: #8C4A52; /* Vino apagado */
@@ -338,7 +338,7 @@
         labels: ['Aprobadas', 'Restantes'],
         datasets: [{
           data: [0, totalMaterias],
-          backgroundColor: [var(--color-progreso-avanzado), var(--color-fondo)], // Colores del gráfico
+          backgroundColor: ['#A8C686', '#F8F4F2'], // Colores del gráfico
         }]
       },
       options: {
